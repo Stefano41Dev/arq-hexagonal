@@ -19,5 +19,6 @@ public class CategoryEntity {
     private String name;
     @ManyToMany(mappedBy = "categories")
     private Set<GameEntity> games = new HashSet<>();
+    private Boolean isActive = true;
 
 }

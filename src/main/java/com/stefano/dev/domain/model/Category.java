@@ -10,4 +10,5 @@ import lombok.Setter;
 public class Category {
     private Integer id;
     private String name;
+    private Boolean isActive = true;
 }

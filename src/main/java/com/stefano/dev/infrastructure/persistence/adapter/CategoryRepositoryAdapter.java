@@ -80,6 +80,7 @@ public class CategoryRepositoryAdapter implements CategoryRepository {
     @Override
     public void delete(Integer id) {
         var category = categoryJPARepository.findById(id).orElseThrow();
+
         categoryJPARepository.delete(category);
     }
 }
