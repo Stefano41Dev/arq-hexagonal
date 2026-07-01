@@ -1,6 +1,7 @@
 package com.stefano.dev.infrastructure.web.controller;
 
 import com.stefano.dev.application.command.category.SaveCategoryCommand;
+import com.stefano.dev.application.command.category.UpdateCategoryNameCommand;
 import com.stefano.dev.application.service.CategoryService;
 import com.stefano.dev.infrastructure.web.dto.category.CategoryDtoRequest;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +52,8 @@ public class CategoryController {
             @PathVariable Integer idCategory,
             @RequestBody CategoryDtoRequest categoryDtoRequest
     ){
-        SaveCategoryCommand saveCategoryCommand = new SaveCategoryCommand(categoryDtoRequest.name());
-        var updateResponse = categoryService.update(idCategory, saveCategoryCommand);
+        UpdateCategoryNameCommand updateCategoryNameCommand = new UpdateCategoryNameCommand(categoryDtoRequest.name());
+        var updateResponse = categoryService.update(idCategory, updateCategoryNameCommand);
         return ResponseEntity.ok(updateResponse);
     }
 

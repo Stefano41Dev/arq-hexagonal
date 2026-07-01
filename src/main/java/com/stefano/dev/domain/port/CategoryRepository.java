@@ -11,8 +11,8 @@ public interface CategoryRepository {
 
     Category save(Category category);
     Optional<Category> findById(Integer id);
-    List<Category> findByName(String name);
+    List<Category> findByNameQuery(String name); //Query
+    Optional<Category> findByName(String name);
     List<Category> list();
-    Category update(Integer id, Category category);
-    void delete(Integer id);
+    void delete(Category category);
 }

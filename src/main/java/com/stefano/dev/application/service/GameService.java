@@ -8,6 +8,8 @@ import com.stefano.dev.domain.port.CategoryRepository;
 import com.stefano.dev.domain.port.GameRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class GameService implements SaveGameUseCase {
     // Todo - Nota: Segunda forma de crear un useCase, por separado cara caso de uso, proyectos medianos o grandes
@@ -28,7 +30,7 @@ public class GameService implements SaveGameUseCase {
                 .name(saveGameCommand.name())
                 .description(saveGameCommand.description())
                 .price(saveGameCommand.price())
-                .category(category)
+                .categories(Set.of(category))
                 .build());
     }
 

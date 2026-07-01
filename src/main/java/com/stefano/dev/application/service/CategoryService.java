@@ -1,9 +1,12 @@
 package com.stefano.dev.application.service;
 
 import com.stefano.dev.application.command.category.SaveCategoryCommand;
+import com.stefano.dev.application.command.category.UpdateCategoryNameCommand;
 import com.stefano.dev.application.usecase.category.CategoryUseCase;
+import com.stefano.dev.domain.exception.ErrorNegocio;
 import com.stefano.dev.domain.model.Category;
 import com.stefano.dev.domain.port.CategoryRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +22,9 @@ public class CategoryService implements CategoryUseCase {
 
     @Override
     public Category save(SaveCategoryCommand saveCategoryCommand) {
+        if(categoryRepository.findByName(saveCategoryCommand.name()).isPresent()){
+            throw new ErrorNegocio("El nombre " + saveCategoryCommand.name() + " ya esta en uso",HttpStatus.CONFLICT);
+        }
 
         return categoryRepository.save(Category.builder()
                 .name(saveCategoryCommand.name())
@@ -27,12 +33,12 @@ public class CategoryService implements CategoryUseCase {
 
     @Override
     public Category findById(Integer id) {
-        return categoryRepository.findById(id).orElseThrow();
+        return categoryRepository.findById(id).orElseThrow(()-> new ErrorNegocio("No existe la categoria con id: "+id, HttpStatus.NOT_FOUND));
     }
 
     @Override
     public List<Category> findByName(String name) {
-        return categoryRepository.findByName(name);
+        return categoryRepository.findByNameQuery(name);
     }
 
     @Override
@@ -41,13 +47,19 @@ public class CategoryService implements CategoryUseCase {
     }
 
     @Override
-    public Category update(Integer id, SaveCategoryCommand saveCategoryCommand) {
-        return categoryRepository.update(id, Category.builder().name(saveCategoryCommand.name()).build());
+    public Category update(Integer id, UpdateCategoryNameCommand updateCategoryNameCommand) {
+        var category = categoryRepository.findById(id).orElseThrow(()-> new ErrorNegocio("No existe la categoria con id: "+id, HttpStatus.NOT_FOUND));
+        if(categoryRepository.findByName(updateCategoryNameCommand.name()).isPresent()){
+           throw new ErrorNegocio("El nombre " + updateCategoryNameCommand.name() + " ya esta en uso",HttpStatus.CONFLICT);
+        }
+        category.setName(updateCategoryNameCommand.name());
+        return categoryRepository.save(category);
     }
 
     @Override
     public void delete(Integer id) {
-        categoryRepository.delete(id);
+        var category = categoryRepository.findById(id).orElseThrow(()-> new ErrorNegocio("No existe la categoria con id: "+id, HttpStatus.NOT_FOUND));
+        categoryRepository.delete(category);
     }
 
 }
