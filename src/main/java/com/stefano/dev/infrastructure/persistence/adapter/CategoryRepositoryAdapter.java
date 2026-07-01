@@ -19,9 +19,11 @@ public class CategoryRepositoryAdapter implements CategoryRepository {
     }
     @Override
     public Category save(Category category) {
-        CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.setName(category.getName());
-        var saveEntity = categoryJPARepository.save(categoryEntity);
+
+        var saveEntity = categoryJPARepository.save(CategoryEntity.builder()
+                .name(category.getName())
+                .build());
+
         return Category.builder()
                 .id(saveEntity.getId())
                 .name(saveEntity.getName())
@@ -30,26 +32,54 @@ public class CategoryRepositoryAdapter implements CategoryRepository {
 
     @Override
     public Optional<Category> findById(Integer id) {
-        return Optional.empty();
+        var categoryEntity = categoryJPARepository.findById(id).orElseThrow();
+
+        return Optional.ofNullable(Category.builder()
+                .id(categoryEntity.getId())
+                .name(categoryEntity.getName())
+                .build());
     }
 
     @Override
-    public Optional<Category> findByName(String name) {
-        return Optional.empty();
+    public List<Category> findByName(String name) {
+        var listCategoryEntity = categoryJPARepository.findByNameContaining(name);
+
+        return listCategoryEntity.stream().map(entity -> Category.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .build())
+                .toList();
     }
 
     @Override
     public List<Category> list() {
-        return List.of();
+        var listCategoryEntity = categoryJPARepository.findAll();
+
+        return listCategoryEntity.stream().map(entity -> Category.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .build())
+                .toList();
     }
 
     @Override
-    public Category update(Category category) {
-        return null;
+    public Category update(Integer id, Category category) {
+        var categoryEntity = categoryJPARepository.findById(id).orElseThrow();
+
+        CategoryEntity updateEntity = categoryJPARepository.save(CategoryEntity.builder()
+                .id(categoryEntity.getId())
+                .name(categoryEntity.getName())
+                .build());
+
+        return Category.builder()
+                .id(updateEntity.getId())
+                .name(updateEntity.getName())
+                .build();
     }
 
     @Override
-    public Void delete(Integer id) {
-        return null;
+    public void delete(Integer id) {
+        var category = categoryJPARepository.findById(id).orElseThrow();
+        categoryJPARepository.delete(category);
     }
 }

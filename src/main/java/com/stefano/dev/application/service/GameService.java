@@ -21,7 +21,6 @@ public class GameService implements SaveGameUseCase {
 
     @Override
     public Game save(SaveGameCommand saveGameCommand) {
-        categoryRepository.findByName(saveGameCommand.name()).orElseThrow();
 
         Category category = categoryRepository.findById(saveGameCommand.categoryId()).orElseThrow();
 
@@ -32,4 +31,6 @@ public class GameService implements SaveGameUseCase {
                 .category(category)
                 .build());
     }
+
+
 }
