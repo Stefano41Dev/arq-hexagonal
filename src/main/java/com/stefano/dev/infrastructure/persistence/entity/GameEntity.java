@@ -1,12 +1,16 @@
 package com.stefano.dev.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "games")
+@Getter @Setter
 public class GameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +24,7 @@ public class GameEntity {
             joinColumns = @JoinColumn(name = "game_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private HashSet<CategoryEntity> categories = new HashSet<>();
+    private Set<CategoryEntity> categories = new HashSet<>();
     private LocalDate createAt = LocalDate.now();
     private Boolean isActive;
 }

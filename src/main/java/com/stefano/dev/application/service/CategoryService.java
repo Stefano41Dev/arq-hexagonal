@@ -16,7 +16,7 @@ public class CategoryService implements CategoryUseCase {
     }
     @Override
     public Category save(SaveCategoryCommand saveCategoryCommand) {
-        categoryRepository.findByName(saveCategoryCommand.name()).orElseThrow();
+        //categoryRepository.findByName(saveCategoryCommand.name()).orElseThrow();
 
         return categoryRepository.save(Category.builder()
                 .name(saveCategoryCommand.name())
