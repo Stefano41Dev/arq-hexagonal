@@ -14,5 +14,5 @@ public interface CategoryRepository {
     List<Category> findByNameQuery(String name); //Query
     Optional<Category> findByName(String name);
     List<Category> list();
-    void delete(Category category);
+
 }

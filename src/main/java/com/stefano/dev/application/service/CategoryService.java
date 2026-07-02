@@ -59,7 +59,8 @@ public class CategoryService implements CategoryUseCase {
     @Override
     public void delete(Integer id) {
         var category = categoryRepository.findById(id).orElseThrow(()-> new ErrorNegocio("No existe la categoria con id: "+id, HttpStatus.NOT_FOUND));
-        categoryRepository.delete(category);
+        category.setIsActive(false);
+        categoryRepository.save(category);
     }
 
 }

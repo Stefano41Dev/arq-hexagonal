@@ -25,11 +25,13 @@ public class CategoryRepositoryAdapter implements CategoryRepository {
         var saveEntity = categoryJPARepository.save(CategoryEntity.builder()
                 .id(category.getId())
                 .name(category.getName())
+                .isActive(category.getIsActive())
                 .build());
 
         return Category.builder()
                 .id(saveEntity.getId())
                 .name(saveEntity.getName())
+                .isActive(category.getIsActive())
                 .build();
     }
 
@@ -64,21 +66,12 @@ public class CategoryRepositoryAdapter implements CategoryRepository {
 
     @Override
     public List<Category> list() {
-        var listCategoryEntity = categoryJPARepository.findAll();
+        var listCategoryEntity = categoryJPARepository.findAllByIsActiveTrue();
 
         return listCategoryEntity.stream().map(entity -> Category.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .build())
                 .toList();
-    }
-
-    @Override
-    public void delete(Category category) {
-
-        categoryJPARepository.delete(CategoryEntity.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .build());
     }
 }
