@@ -1,9 +1,9 @@
 package com.stefano.dev.domain.port;
 
 import com.stefano.dev.domain.model.Game;
-import org.springframework.stereotype.Component;
+import com.stefano.dev.domain.pagination.PageResult;
 
-import java.util.List;
+
 import java.util.Optional;
 
 
@@ -13,8 +13,8 @@ public interface GameRepository {
 
     Game save(Game game);
     Optional<Game> findById(Integer id);
-    Optional<Game> findByName(String name);
-    List<Game> list();
+    PageResult<Game> findByName(String name);
+    PageResult<Game> list();
     Game update(Game game);
     Void delete(Integer id);
 
