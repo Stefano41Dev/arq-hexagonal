@@ -18,5 +18,6 @@ public class Game {
     private Set<Category> categories;
     @Builder.Default
     private LocalDate createAt = LocalDate.now();
-    private Boolean isActive;
+    @Builder.Default
+    private Boolean isActive = true;
 }

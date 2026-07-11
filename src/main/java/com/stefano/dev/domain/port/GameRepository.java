@@ -1,6 +1,7 @@
 package com.stefano.dev.domain.port;
 
 import com.stefano.dev.domain.model.Game;
+import com.stefano.dev.domain.pagination.PageRequest;
 import com.stefano.dev.domain.pagination.PageResult;
 
 
@@ -13,9 +14,9 @@ public interface GameRepository {
 
     Game save(Game game);
     Optional<Game> findById(Integer id);
-    PageResult<Game> findByName(String name);
-    PageResult<Game> list();
-    Game update(Game game);
-    Void delete(Integer id);
+    PageResult<Game> findByName(String name, PageRequest pageRequest);
+    PageResult<Game> list(PageRequest pageRequest);
+
+
 
 }

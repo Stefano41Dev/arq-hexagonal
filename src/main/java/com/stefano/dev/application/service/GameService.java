@@ -5,9 +5,11 @@ import com.stefano.dev.application.usecase.game.*;
 import com.stefano.dev.domain.exception.ErrorNegocio;
 import com.stefano.dev.domain.model.Category;
 import com.stefano.dev.domain.model.Game;
+import com.stefano.dev.domain.pagination.PageRequest;
 import com.stefano.dev.domain.pagination.PageResult;
 import com.stefano.dev.domain.port.CategoryRepository;
 import com.stefano.dev.domain.port.GameRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +29,6 @@ public class GameService implements SaveGameUseCase, DeleteGameUseCase, FindById
 
     @Override
     public Game save(SaveGameCommand saveGameCommand) {
-
-
         Set<Category> categories = saveGameCommand.categoriesId().stream()
                 .map(id -> categoryRepository.findById(id)
                         .orElseThrow(() -> new ErrorNegocio("Categoría no encontrada: " + id, HttpStatus.NOT_FOUND)))
@@ -45,7 +45,7 @@ public class GameService implements SaveGameUseCase, DeleteGameUseCase, FindById
 
     @Override
     public void delete(Integer id) {
-        var gameDelete = gameRepository.findById(id).orElseThrow();
+        var gameDelete = gameRepository.findById(id).orElseThrow(()-> new ErrorNegocio("No existe el juego con id: "+id, HttpStatus.NOT_FOUND));
         gameDelete.setIsActive(false);
         gameRepository.save(gameDelete);
     }
@@ -56,14 +56,13 @@ public class GameService implements SaveGameUseCase, DeleteGameUseCase, FindById
     }
 
     @Override
-    public PageResult<Game> findByName(String name) {
-
-        return gameRepository.findByName(name);
+    public PageResult<Game> findByName(String name, PageRequest pageRequest) {
+        return gameRepository.findByName(name, pageRequest);
     }
 
     @Override
     public Game update(Integer id, SaveGameCommand update) {
-        var gameUpdate = gameRepository.findById(id).orElseThrow();
+        var gameUpdate = gameRepository.findById(id).orElseThrow(()-> new ErrorNegocio("No existe el juego con id: "+id, HttpStatus.NOT_FOUND));
 
         Set<Category> categories = update.categoriesId().stream()
                 .map(idCate -> categoryRepository.findById(idCate)
@@ -79,7 +78,7 @@ public class GameService implements SaveGameUseCase, DeleteGameUseCase, FindById
     }
 
     @Override
-    public PageResult<Game> list() {
-        return gameRepository.list();
+    public PageResult<Game> list(PageRequest pageRequest) {
+        return gameRepository.list(pageRequest);
     }
 }
